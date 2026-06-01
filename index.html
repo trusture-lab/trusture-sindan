@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>無料セキュリティ診断シート｜中小企業向け</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif; background: #F5F7FA; color: #222; line-height: 1.7; }
+  .page { max-width: 720px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+  .cover { background: #1A3A5C; color: #fff; border-radius: 12px; padding: 2.5rem 2rem 2rem; margin-bottom: 2rem; }
+  .cover-badge { display: inline-block; background: rgba(255,255,255,0.18); border-radius: 4px; font-size: 11px; letter-spacing: .08em; padding: 3px 10px; margin-bottom: 1rem; }
+  .cover h1 { font-size: 1.45rem; font-weight: 700; line-height: 1.4; margin-bottom: .5rem; }
+  .cover p { font-size: .85rem; color: rgba(255,255,255,0.8); }
+  .progress-bar { height: 5px; background: #E2E8F0; border-radius: 99px; margin-bottom: 2rem; overflow: hidden; }
+  .progress-fill { height: 100%; background: #1A3A5C; border-radius: 99px; transition: width .4s ease; width: 0%; }
+  .section { background: #fff; border: 1px solid #E2E8F0; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.25rem; }
+  .section-label { font-size: 11px; font-weight: 700; color: #888; letter-spacing: .08em; margin-bottom: .5rem; }
+  .section h2 { font-size: 1rem; font-weight: 700; color: #1A3A5C; margin-bottom: 1.25rem; padding-bottom: .6rem; border-bottom: 1.5px solid #E8F0F8; }
+  .question { margin-bottom: 1.5rem; }
+  .question:last-child { margin-bottom: 0; }
+  .q-label { font-size: .9rem; font-weight: 600; color: #222; margin-bottom: .6rem; display: flex; gap: .5rem; align-items: flex-start; }
+  .q-num { flex-shrink: 0; width: 22px; height: 22px; background: #1A3A5C; color: #fff; border-radius: 50%; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-top: 1px; }
+  .q-text { flex: 1; }
+  .q-sub { font-size: .78rem; color: #777; margin-left: 30px; margin-bottom: .5rem; }
+  .radio-group { display: flex; flex-direction: column; gap: .5rem; margin-left: 30px; }
+  .radio-opt { display: flex; align-items: center; gap: .6rem; cursor: pointer; padding: .45rem .75rem; border-radius: 8px; border: 1.5px solid #E2E8F0; transition: background .15s, border-color .15s; }
+  .radio-opt:hover { background: #F0F7FF; border-color: #B5D4F4; }
+  .radio-opt input[type=radio] { accent-color: #1A3A5C; width: 16px; height: 16px; flex-shrink: 0; }
+  .radio-opt.selected { background: #EBF3FB; border-color: #1A3A5C; }
+  .radio-opt span { font-size: .88rem; }
+  .text-input, .select-input { width: 100%; padding: .55rem .8rem; border: 1.5px solid #E2E8F0; border-radius: 8px; font-size: .88rem; font-family: inherit; margin-top: .25rem; color: #222; transition: border-color .15s; }
+  .text-input:focus, .select-input:focus { outline: none; border-color: #1A3A5C; }
+  .btn { display: block; width: 100%; padding: 1rem; border: none; border-radius: 10px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: opacity .2s, transform .1s; margin-top: 2rem; }
+  .btn:active { transform: scale(.98); }
+  .btn-primary { background: #1A3A5C; color: #fff; }
+  .btn-primary:hover { opacity: .9; }
+  #result { display: none; }
+  .result-card { border-radius: 12px; padding: 2rem; margin-bottom: 1.25rem; }
+  .result-high { background: #FFF0F0; border: 1.5px solid #F5AAAA; }
+  .result-mid  { background: #FFF8E8; border: 1.5px solid #F5D98C; }
+  .result-low  { background: #EDFBF3; border: 1.5px solid #7DDBA8; }
+  .result-badge { display: inline-block; padding: 4px 14px; border-radius: 99px; font-size: 11px; font-weight: 700; letter-spacing: .06em; margin-bottom: .75rem; }
+  .badge-high { background: #E53E3E; color: #fff; }
+  .badge-mid  { background: #D69E2E; color: #fff; }
+  .badge-low  { background: #38A169; color: #fff; }
+  .result-title { font-size: 1.25rem; font-weight: 700; margin-bottom: .5rem; }
+  .result-body { font-size: .88rem; color: #444; line-height: 1.75; }
+  .action-box { background: #fff; border: 1.5px solid #1A3A5C; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.25rem; }
+  .action-box h3 { font-size: .95rem; font-weight: 700; color: #1A3A5C; margin-bottom: .75rem; }
+  .action-box p { font-size: .85rem; color: #333; line-height: 1.75; }
+  .action-box a { color: #1A3A5C; font-weight: 700; text-decoration: underline; }
+  .risk-list { list-style: none; display: flex; flex-direction: column; gap: .4rem; margin-top: .75rem; }
+  .risk-list li { display: flex; gap: .5rem; font-size: .85rem; align-items: flex-start; }
+  .risk-list li::before { content: "▶"; color: #E53E3E; flex-shrink: 0; font-size: .8rem; margin-top: 2px; }
+  @media (max-width: 480px) { .cover h1 { font-size: 1.2rem; } }
+</style>
+</head>
+<body>
+<div class="page">
+  <div id="form-area">
+    <div class="cover">
+      <div class="cover-badge">無料 · 5分で完了</div>
+      <h1>あなたの会社は大丈夫？<br>情報セキュリティ 無料リスク診断</h1>
+      <p>ISO 27001 / IPA中小企業ガイドライン準拠 · 全10問 · 診断後すぐに結果表示</p>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+    <div class="section">
+      <div class="section-label">STEP 1 / 4</div>
+      <h2>会社の基本情報</h2>
+      <div class="question">
+        <div class="q-label"><span class="q-text">会社名（任意）</span></div>
+        <input class="text-input" type="text" id="company" placeholder="〇〇株式会社">
+      </div>
+      <div class="question">
+        <div class="q-label"><span class="q-text">従業員数</span></div>
+        <select class="select-input" id="emp" onchange="updateProgress()">
+          <option value="">選択してください</option>
+          <option value="1">1〜5人</option><option value="2">6〜20人</option>
+          <option value="3">21〜50人</option><option value="4">51人以上</option>
+        </select>
+      </div>
+      <div class="question">
+        <div class="q-label"><span class="q-text">業種</span></div>
+        <select class="select-input" id="industry" onchange="updateProgress()">
+          <option value="">選択してください</option>
+          <option>製造業</option><option>建設業</option><option>卸売・小売業</option>
+          <option>IT・情報通信</option><option>医療・介護</option><option>士業（会計・法律）</option>
+          <option>飲食・サービス</option><option>その他</option>
+        </select>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-label">STEP 2 / 4　基本的な対策（ISO 27001 附属書A 8.5 / 7.8）</div>
+      <h2>パスワード・画面ロック・端末管理</h2>
+      <div class="question">
+        <div class="q-label"><div class="q-num">1</div><div class="q-text">社員が同じパスワードを複数のサービスで使い回している可能性がありますか？</div></div>
+        <div class="q-sub">例：メールと会計ソフトで同じパスワードを使っているなど</div>
+        <div class="radio-group" id="q1">
+          <label class="radio-opt"><input type="radio" name="q1" value="3" onchange="pickOpt(this)"><span>はい、使い回していると思う（または把握できていない）</span></label>
+          <label class="radio-opt"><input type="radio" name="q1" value="1" onchange="pickOpt(this)"><span>一部は使い回しているが、重要なものは分けている</span></label>
+          <label class="radio-opt"><input type="radio" name="q1" value="0" onchange="pickOpt(this)"><span>すべて異なるパスワードを使用している</span></label>
+        </div>
+      </div>
+      <div class="question">
+        <div class="q-label"><div class="q-num">2</div><div class="q-text">社員が席を離れるとき、パソコンの画面をロックしていますか？</div></div>
+        <div class="q-sub">例：トイレ・会議・来客対応中などに画面が開いたまま放置されていないか</div>
+        <div class="radio-group" id="q2">
+          <label class="radio-opt"><input type="radio" name="q2" value="3" onchange="pickOpt(this)"><span>ルールはなく、ほとんどロックしていない</span></label>
+          <label class="radio-opt"><input type="radio" name="q2" value="1" onchange="pickOpt(this)"><span>声かけはしているが、徹底できていない</span></label>
+          <label class="radio-opt"><input type="radio" name="q2" value="0" onchange="pickOpt(this)"><span>ルール化されており、全員が実施している</span></label>
+        </div>
+      </div>
+      <div class="question">
+        <div class="q-label"><div class="q-num">3</div><div class="q-text">退職した社員のアカウント（メール・クラウド・システム）を速やかに削除していますか？</div></div>
+        <div class="radio-group" id="q3">
+          <label class="radio-opt"><input type="radio" name="q3" value="3" onchange="pickOpt(this)"><span>特に手続きを決めていない・把握できていない</span></label>
+          <label class="radio-opt"><input type="radio" name="q3" value="1" onchange="pickOpt(this)"><span>対応しているが、抜け漏れがあるかもしれない</span></label>
+          <label class="radio-opt"><input type="radio" name="q3" value="0" onchange="pickOpt(this)"><span>退職日当日または翌営業日に必ず削除している</span></label>
+        </div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-label">STEP 3 / 4　外出・テレワーク（総務省テレワークガイドライン）</div>
+      <h2>Wi-Fi・持ち出し端末・メール</h2>
+      <div class="question">
+        <div class="q-label"><div class="q-num">4</div><div class="q-text">社員がカフェや駅などの公共フリーWi-Fiを使って業務を行うことがありますか？</div></div>
+        <div class="radio-group" id="q4">
+          <label class="radio-opt"><input type="radio" name="q4" value="3" onchange="pickOpt(this)"><span>ある（特にルールを決めていない）</span></label>
+          <label class="radio-opt"><input type="radio" name="q4" value="1" onchange="pickOpt(this)"><span>あるが、VPNやテザリングを使うよう伝えている</span></label>
+          <label class="radio-opt"><input type="radio" name="q4" value="0" onchange="pickOpt(this)"><span>フリーWi-Fiでの業務を禁止しており、テザリング使用が徹底されている</span></label>
+        </div>
+      </div>
+      <div class="question">
+        <div class="q-label"><div class="q-num">5</div><div class="q-text">不審なメール（なりすまし・偽のリンク・添付ファイル）への対処方法を社員に伝えていますか？</div></div>
+        <div class="q-sub">「フィッシングメール」「標的型メール」と呼ばれる攻撃への備え</div>
+        <div class="radio-group" id="q5">
+          <label class="radio-opt"><input type="radio" name="q5" value="3" onchange="pickOpt(this)"><span>特に伝えていない</span></label>
+          <label class="radio-opt"><input type="radio" name="q5" value="1" onchange="pickOpt(this)"><span>口頭で注意を促したことはあるが、マニュアルはない</span></label>
+          <label class="radio-opt"><input type="radio" name="q5" value="0" onchange="pickOpt(this)"><span>手順書または社内ルールがある</span></label>
+        </div>
+      </div>
+      <div class="question">
+        <div class="q-label"><div class="q-num">6</div><div class="q-text">社外に持ち出すノートPCやUSBメモリに、紛失・盗難対策をしていますか？</div></div>
+        <div class="q-sub">例：ディスク暗号化（BitLockerなど）、パスワードロック</div>
+        <div class="radio-group" id="q6">
+          <label class="radio-opt"><input type="radio" name="q6" value="3" onchange="pickOpt(this)"><span>していない（または把握していない）</span></label>
+          <label class="radio-opt"><input type="radio" name="q6" value="1" onchange="pickOpt(this)"><span>一部の端末だけ対策している</span></label>
+          <label class="radio-opt"><input type="radio" name="q6" value="0" onchange="pickOpt(this)"><span>すべての端末で対策済み</span></label>
+        </div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-label">STEP 4 / 4　組織体制（IPA 5か条 / ISO 27001 5.26）</div>
+      <h2>インシデント対応・バックアップ・取引先対策</h2>
+      <div class="question">
+        <div class="q-label"><div class="q-num">7</div><div class="q-text">ウイルス感染や情報漏洩が起きたとき、社員はすぐに誰に報告すればよいか把握していますか？</div></div>
+        <div class="radio-group" id="q7">
+          <label class="radio-opt"><input type="radio" name="q7" value="3" onchange="pickOpt(this)"><span>決まっていない・わからない</span></label>
+          <label class="radio-opt"><input type="radio" name="q7" value="1" onchange="pickOpt(this)"><span>経営者に言うとは伝えているが、手順書はない</span></label>
+          <label class="radio-opt"><input type="radio" name="q7" value="0" onchange="pickOpt(this)"><span>報告先と初動手順が明確に決まっている</span></label>
+        </div>
+      </div>
+      <div class="question">
+        <div class="q-label"><div class="q-num">8</div><div class="q-text">重要なデータ（顧客情報・契約書・会計データ）の定期バックアップを取っていますか？</div></div>
+        <div class="radio-group" id="q8">
+          <label class="radio-opt"><input type="radio" name="q8" value="3" onchange="pickOpt(this)"><span>していない（または不定期）</span></label>
+          <label class="radio-opt"><input type="radio" name="q8" value="1" onchange="pickOpt(this)"><span>しているが、クラウドのみ（またはローカルのみ）</span></label>
+          <label class="radio-opt"><input type="radio" name="q8" value="0" onchange="pickOpt(this)"><span>クラウド＋別の場所（3-2-1ルール相当）でバックアップ済み</span></label>
+        </div>
+      </div>
+      <div class="question">
+        <div class="q-label"><div class="q-num">9</div><div class="q-text">取引先（大企業・官公庁など）からセキュリティチェックシートが届いたとき、自社で回答できますか？</div></div>
+        <div class="radio-group" id="q9">
+          <label class="radio-opt"><input type="radio" name="q9" value="3" onchange="pickOpt(this)"><span>来たことがある・または来ると思うが、対応できない</span></label>
+          <label class="radio-opt"><input type="radio" name="q9" value="1" onchange="pickOpt(this)"><span>なんとか対応しているが、自信がない</span></label>
+          <label class="radio-opt"><input type="radio" name="q9" value="0" onchange="pickOpt(this)"><span>問題なく対応できる</span></label>
+        </div>
+      </div>
+      <div class="question">
+        <div class="q-label"><div class="q-num">10</div><div class="q-text">情報セキュリティについて、専門知識を持つ社内担当者またはアドバイザーがいますか？</div></div>
+        <div class="radio-group" id="q10">
+          <label class="radio-opt"><input type="radio" name="q10" value="3" onchange="pickOpt(this)"><span>いない（完全に手探りの状態）</span></label>
+          <label class="radio-opt"><input type="radio" name="q10" value="1" onchange="pickOpt(this)"><span>多少詳しい社員がいるが、専門家ではない</span></label>
+          <label class="radio-opt"><input type="radio" name="q10" value="0" onchange="pickOpt(this)"><span>専門のアドバイザーまたは担当者がいる</span></label>
+        </div>
+      </div>
+    </div>
+    <button class="btn btn-primary" onclick="showResult()">診断結果を見る →</button>
+  </div>
+
+  <div id="result">
+    <div id="result-card" class="result-card"></div>
+    <div class="section">
+      <h2 style="color:#1A3A5C;">あなたの会社で特にリスクが高い項目</h2>
+      <ul class="risk-list" id="risk-items"></ul>
+    </div>
+    <div class="action-box">
+      <h3>次のステップ — 無料で相談できます</h3>
+      <p>診断結果を専門家に見せて、<strong>15分の無料オンライン相談</strong>を受けてみてください。<br>
+      無理な売り込みは一切しません。「今の規模にはオーバースペックです」と全力でお止めすることもあります。<br><br>
+      <strong>▶ TRUSTURE公式サイト：</strong><a href="https://trusture-japan.com" target="_blank" rel="noopener">https://trusture-japan.com</a><br>
+      <strong>▶ メール相談：</strong><a href="mailto:trusture.ads0815@gmail.com">trusture.ads0815@gmail.com</a><br><br>
+      <span style="font-size:.8rem; color:#888;">※本診断はあくまで参考情報です。診断結果によって生じた損害について、サービス提供者は責任を負いません。</span>
+      </p>
+    </div>
+    <button class="btn" style="background:#E2E8F0; color:#333;" onclick="reset()">← もう一度診断する</button>
+  </div>
+</div>
+<script>
+const labels = {
+  q1:"パスワードの使い回し",q2:"離席時の画面ロック未実施",q3:"退職者アカウントの削除管理",
+  q4:"フリーWi-Fiでの業務",q5:"不審メール対応マニュアルの不在",q6:"持ち出し端末の暗号化未対策",
+  q7:"インシデント報告ルートの不明確",q8:"データバックアップの不備",
+  q9:"セキュリティチェックシート未対応",q10:"セキュリティ専門知識の不在"
+};
+function pickOpt(radio) {
+  document.querySelectorAll(`[name="${radio.name}"] `).forEach(r => r.closest('.radio-opt').classList.remove('selected'));
+  radio.closest('.radio-opt').classList.add('selected');
+  updateProgress();
+}
+function updateProgress() {
+  let base = (document.getElementById('emp').value ? 1 : 0) + (document.getElementById('industry').value ? 1 : 0);
+  let qCount = 0;
+  for (let i = 1; i <= 10; i++) if (document.querySelector(`[name="q${i}"]:checked`)) qCount++;
+  document.getElementById('progress').style.width = Math.round((base/2 * 10 + qCount * 9)) + '%';
+}
+function showResult() {
+  let score = 0; const risks = [];
+  for (let i = 1; i <= 10; i++) {
+    const el = document.querySelector(`[name="q${i}"]:checked`);
+    const val = el ? parseInt(el.value) : 3;
+    score += val;
+    if (val >= 2) risks.push(labels[`q${i}`]);
+  }
+  let cardClass, badgeClass, badgeText, title, body;
+  if (score >= 18) {
+    cardClass='result-high'; badgeClass='badge-high'; badgeText='リスクレベル：高';
+    title='複数の重大なセキュリティリスクが見つかりました';
+    body='スコアから見て、御社は現在、サイバー攻撃やデータ漏洩に対して非常に脆弱な状態です。取引先からのセキュリティチェックシートが届いた場合、対応できない可能性が高く、取引停止リスクも存在します。まずは無料相談で、優先的に取り組むべき3つの対策を確認することをお勧めします。';
+  } else if (score >= 9) {
+    cardClass='result-mid'; badgeClass='badge-mid'; badgeText='リスクレベル：中';
+    title='改善できる余地が複数あります';
+    body='基本的な対策は一部取れていますが、組織全体として「穴」がある状態です。万が一インシデントが起きた際に被害が拡大しやすいポイントがいくつか見受けられます。軽微なコストで大きなリスクを減らせる段階です。';
+  } else {
+    cardClass='result-low'; badgeClass='badge-low'; badgeText='リスクレベル：低';
+    title='基本的な対策ができています';
+    body='全体として良好な状態です。ただし、取引先要件の変化や新たな攻撃手法への対応として、定期的な見直しを続けることが重要です。';
+  }
+  document.getElementById('result-card').className = `result-card ${cardClass}`;
+  document.getElementById('result-card').innerHTML = `
+    <div class="result-badge ${badgeClass}">${badgeText}（スコア ${score}/30）</div>
+    <div class="result-title">${title}</div>
+    <p class="result-body">${body}</p>`;
+  document.getElementById('risk-items').innerHTML = risks.length
+    ? risks.map(r => `<li>${r}</li>`).join('')
+    : '<li style="color:#38A169">特に大きなリスク項目は見当たりませんでした。引き続き定期的な確認を行いましょう。</li>';
+  document.getElementById('form-area').style.display = 'none';
+  document.getElementById('result').style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function reset() {
+  document.getElementById('form-area').style.display = 'block';
+  document.getElementById('result').style.display = 'none';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
